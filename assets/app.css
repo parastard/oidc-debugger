@@ -285,4 +285,11 @@ pre, .result {
   margin-left: 8px;
 }
 
+/* Token field styling */
+.tok-field {
+  font-family: ui-monospace, monospace;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
 

@@ -72,6 +72,77 @@
             <button id="tx_exchange_btn" class="btn btn-primary">Exchange code</button>
           </div>
         </div>
+        <div class="card">
+          <h2>Tokens (raw)</h2>
+          
+          <div>
+            <label for="tok_access">Access token</label>
+            <textarea id="tok_access" class="tok-field" rows="3" readonly></textarea>
+            <button id="copy_access_btn" class="btn btn-secondary" aria-label="Copy access token">Copy</button>
+          </div>
+
+          <div>
+            <label for="tok_id">ID token</label>
+            <textarea id="tok_id" class="tok-field" rows="3" readonly></textarea>
+            <button id="copy_id_btn" class="btn btn-secondary" aria-label="Copy ID token">Copy</button>
+          </div>
+
+          <div>
+            <label for="tok_refresh">Refresh token</label>
+            <textarea id="tok_refresh" class="tok-field" rows="2" readonly></textarea>
+            <button id="copy_refresh_btn" class="btn btn-secondary" aria-label="Copy refresh token">Copy</button>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="tok_type">Token type</label>
+              <input id="tok_type" readonly />
+            </div>
+            <div>
+              <label for="tok_expires_in">Expires in (seconds)</label>
+              <input id="tok_expires_in" readonly />
+            </div>
+          </div>
+
+          <div>
+            <label for="tok_scope">Scope</label>
+            <input id="tok_scope" readonly />
+          </div>
+
+          <p class="muted">Tokens shown here are returned by your IdP. Don't paste secrets into untrusted tools.</p>
+        </div>
+        <div class="card">
+          <h2>JWT Decoders (decode-only)</h2>
+          
+          <p class="muted">Decoding only — signature NOT verified here. Use the Verification panel below to verify.</p>
+
+          <div class="row">
+            <div>
+              <label>ID Token Header</label>
+              <pre id="dec_id_header"></pre>
+            </div>
+            <div>
+              <label>ID Token Payload</label>
+              <pre id="dec_id_payload"></pre>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Access Token Header</label>
+              <pre id="dec_access_header"></pre>
+            </div>
+            <div>
+              <label>Access Token Payload</label>
+              <pre id="dec_access_payload"></pre>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="copy_dec_id_btn" class="btn btn-secondary">Copy ID Token (header+payload)</button>
+            <button id="copy_dec_access_btn" class="btn btn-secondary">Copy Access Token (header+payload)</button>
+          </div>
+        </div>
       </div>
     </main>
 

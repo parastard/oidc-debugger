@@ -1,8 +1,23 @@
 # OpenID Connect Debugger
 
-v0.1.0
+v0.1.1
 
 A local OIDC playground to build /authorize requests, handle /callback, and exchange codes.
+
+## What's new (v0.1.1)
+
+Tokens (raw) panel on the callback page now shows:
+
+- access_token, id_token, refresh_token, token_type, expires_in, scope
+
+Populated both from implicit/hybrid redirects and after Token Exchange.
+
+JWT decoders for access token and ID token:
+
+- Display header and payload (decode-only; no signature verification here).
+- Note: some providers issue opaque access tokens (not JWT) — decoder will show "not a JWT".
+
+Tokens are saved in sessionStorage (oidcdbg:lastTokens) so they persist across a single browser session.
 
 ## What’s included (v0.1.0)
 
@@ -52,6 +67,8 @@ After login, you land on `/callback`, which shows:
 
 To exchange a code: on the callback page, fill Token Endpoint, choose Client Authentication (`none`, `client_secret_post`, `client_secret_basic`), and click Exchange code.
 
+- Check Tokens (raw) and JWT Decoders on the callback page to inspect values and JWT claims.
+
 ## Token exchange details
 
 - Request: `grant_type=authorization_code`, `code`, `redirect_uri`, `client_id`, `code_verifier` (if PKCE).
@@ -63,6 +80,7 @@ To exchange a code: on the callback page, fill Token Endpoint, choose Client Aut
 
 - This is a developer tool—don’t expose publicly without hardening.
 - Secrets are not stored client-side; avoid committing them.
+- Decoded tokens are displayed locally in your browser. Avoid pasting tokens into untrusted tools.
 - For production exposure, add TLS, stricter headers (Helmet/CSP), rate limiting, auth in front, and logging redaction.
 
 ## Troubleshooting
