@@ -1,0 +1,174 @@
+<!--
+  OpenID Connect Debugger (Phase-1)
+  Purpose: Static UI to compose an OIDC Authorization Request URL. No backend.
+  Deploy: Serve this directory as static files (e.g., GitHub Pages, Netlify, `python -m http.server`).
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OIDC Debugger – Phase‑1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/app.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="header">
+        <h1>Local OIDC Debugger</h1>
+        <p class="subtitle">Build auth requests, run flows, and inspect callbacks. Phase-1: no token exchange.</p>
+      </header>
+
+      <!-- Main Authorization Request card -->
+      <div class="card">
+        <h2>Authorization Request</h2>
+        
+        <div class="row">
+          <div>
+            <label for="authorization_endpoint">Authorization endpoint <span class="muted">(required)</span></label>
+            <input id="authorization_endpoint" type="url" placeholder="https://issuer.example.com/oauth2/v2.0/authorize" required />
+          </div>
+          <div></div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="client_id">Client ID <span class="muted">(required)</span></label>
+            <input id="client_id" required />
+          </div>
+          <div>
+            <label for="redirect_uri">Redirect URI</label>
+            <input id="redirect_uri" type="url" value="http://localhost:3000/callback" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="scope">Scope</label>
+            <input id="scope" value="openid profile email" />
+          </div>
+          <div>
+            <label for="response_type">Response type</label>
+            <select id="response_type">
+              <option>code</option>
+              <option>id_token</option>
+              <option>token</option>
+              <option>code id_token</option>
+              <option>code token</option>
+              <option>code token id_token</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="response_mode">Response mode</label>
+            <select id="response_mode">
+              <option value="">(default)</option>
+              <option value="query">query</option>
+              <option value="fragment">fragment</option>
+            </select>
+          </div>
+          <div>
+            <label for="state">State</label>
+            <div class="inline-group">
+              <input id="state" placeholder="Auto‑generate if blank" />
+              <button data-gen="state" class="btn btn-secondary">Generate</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="nonce">Nonce</label>
+            <div class="inline-group">
+              <input id="nonce" placeholder="Required when id_token is requested" />
+              <button data-gen="nonce" class="btn btn-secondary">Generate</button>
+            </div>
+            <p class="muted">Required when response_type includes id_token.</p>
+          </div>
+          <div>
+            <label for="pkce">PKCE <span class="pill">S256</span></label>
+            <select id="pkce">
+              <option value="none">none</option>
+              <option value="S256">S256</option>
+              <option value="plain">plain</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="code_verifier">Code verifier</label>
+            <div class="inline-group">
+              <input id="code_verifier" placeholder="Generated when PKCE enabled" />
+              <button data-gen="verifier" class="btn btn-secondary">Generate</button>
+            </div>
+          </div>
+          <div>
+            <label for="code_challenge">Code challenge</label>
+            <input id="code_challenge" readonly />
+          </div>
+        </div>
+
+        <div>
+          <label for="extra_params">Extra params</label>
+          <textarea id="extra_params" placeholder="audience=api&#10;resource=https://example.com&#10;prompt=consent"></textarea>
+          <p class="muted">key=value per line.</p>
+        </div>
+
+        <div>
+          <label for="result_url">Result</label>
+          <textarea id="result_url" class="result" readonly></textarea>
+          
+          <button id="btn-start" class="btn btn-primary">Start Authorization</button>
+          
+          <div class="actions-secondary">
+            <button id="btn-build" class="btn btn-secondary">Build URL</button>
+            <button id="btn-copy" class="btn btn-secondary" disabled>Copy URL</button>
+            <button id="btn-reset" class="btn btn-ghost">Reset</button>
+          </div>
+          
+          <div id="alert" class="hidden"></div>
+        </div>
+      </div>
+
+      <!-- Secondary row with two cards -->
+      <div class="grid-2">
+        <div class="card">
+          <h2>Future Use</h2>
+          <p class="muted">Reserved for future features.</p>
+        </div>
+        
+        <div class="card">
+          <h2>Profiles (local)</h2>
+          
+          <div class="row">
+            <div>
+              <label for="profile_name">Name</label>
+              <input id="profile_name" placeholder="e.g., MyIssuer (PKCE)" />
+            </div>
+            <div>
+              <label for="profile_list">Saved</label>
+              <select id="profile_list"></select>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="btn-save" class="btn btn-secondary">Save</button>
+            <button id="btn-load" class="btn btn-secondary">Load</button>
+            <button id="btn-delete" class="btn btn-ghost">Delete</button>
+          </div>
+
+          <p class="muted">Local to this browser. No backend.</p>
+        </div>
+      </div>
+    </main>
+
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+    <script src="assets/app.js"></script>
+  </body>
+  </html>
+
+

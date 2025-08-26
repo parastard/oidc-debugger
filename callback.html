@@ -1,0 +1,83 @@
+<!--
+  OIDC Debugger – Callback Page (Phase-1)
+  Purpose: Display query and fragment parameters and decode id_token (unverified).
+  Deploy: Serve as static file alongside index.html.
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OIDC Debugger – Callback</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/app.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="header">
+        <h1>Local OIDC Debugger</h1>
+        <p class="subtitle">Build auth requests, run flows, and inspect callbacks. Phase-1: no token exchange.</p>
+        <a href="index.html" class="btn btn-secondary" style="margin-top: 1rem;">Back to Builder</a>
+      </header>
+
+      <div class="grid-3">
+        <div class="card">
+          <h2>Query params</h2>
+          <pre id="query_json"></pre>
+          <button id="copy_query" class="btn btn-secondary">Copy Query JSON</button>
+        </div>
+        <div class="card">
+          <h2>Fragment params</h2>
+          <pre id="fragment_json"></pre>
+          <button id="copy_fragment" class="btn btn-secondary">Copy Fragment JSON</button>
+        </div>
+        <div class="card">
+          <h2>Decoded ID Token (unverified)</h2>
+          <pre id="idtoken_json"></pre>
+          <button id="copy_idtoken" class="btn btn-secondary" disabled>Copy Decoded ID Token JSON</button>
+        </div>
+        <div class="card">
+          <h2>Token Exchange (Phase-2)</h2>
+          
+          <div class="row">
+            <div>
+              <label for="tx_token_endpoint">Token endpoint <span class="muted">(required)</span></label>
+              <input id="tx_token_endpoint" placeholder="https://issuer.example.com/oauth2/token" />
+            </div>
+            <div>
+              <label for="tx_client_id">Client ID</label>
+              <input id="tx_client_id" readonly />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="tx_redirect_uri">Redirect URI</label>
+              <input id="tx_redirect_uri" readonly />
+            </div>
+            <div>
+              <label for="tx_code">Authorization code</label>
+              <input id="tx_code" readonly />
+            </div>
+          </div>
+
+          <div>
+            <label for="tx_code_verifier">Code verifier</label>
+            <input id="tx_code_verifier" readonly />
+          </div>
+
+          <div>
+            <label for="tx_result">Result</label>
+            <pre id="tx_result"></pre>
+            <button id="tx_exchange_btn" class="btn btn-primary">Exchange code</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+    <script src="assets/callback.js"></script>
+  </body>
+  </html>
+
+

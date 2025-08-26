@@ -1,0 +1,16 @@
+{
+  "name": "oidc-debugger",
+  "version": "0.1.0",
+  "description": "Phase-1 OIDC Debugger with Express server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "node-fetch": "^3.3.2"
+  },
+  "keywords": ["oidc", "oauth", "debugger"],
+  "author": "",
+  "license": "MIT"
+}
