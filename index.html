@@ -26,7 +26,75 @@
         <div class="row">
           <div>
             <label for="authorization_endpoint">Authorization endpoint <span class="muted">(required)</span></label>
-            <input id="authorization_endpoint" type="url" placeholder="https://issuer.example.com/oauth2/v2.0/authorize" required />
+            <select id="authorization_endpoint" required>
+              <option value="https://dev-identification.bell.ca/authorize">DEV</option>
+              <option value="https://dit-identification.bell.ca/authorize">Bell DIT</option>
+              <option value="https://uat-identification.bell.ca/authorize">Bell UAT</option>
+            </select>
+            <input id="authorization_endpoint_custom" type="url" placeholder="Custom endpoint..." style="display:none;margin-top:4px;" />
+    <script>
+      // Show/hide custom endpoint field and manage client ID dropdown
+      document.addEventListener('DOMContentLoaded', function() {
+        var endpointSelect = document.getElementById('authorization_endpoint');
+        var custom = document.getElementById('authorization_endpoint_custom');
+        var clientIdInput = document.getElementById('client_id');
+        var clientIdSelect = document.getElementById('client_id_select');
+
+        // Map endpoints to client IDs
+        var clientIds = {
+          'https://dev-identification.bell.ca/authorize': ['sIcWBAKkaApUlQZCrD1mfuXOkHkGlr9z'],
+          'https://dit-identification.bell.ca/authorize': ['bell-dit-client-1', 'bell-dit-client-2'],
+          'https://uat-identification.bell.ca/authorize': ['bell-uat-client-1', 'bell-uat-client-2']
+        };
+
+        function updateClientIdField() {
+          var selectedEndpoint = endpointSelect.value;
+          if (selectedEndpoint === 'custom') {
+            custom.style.display = '';
+            clientIdSelect.style.display = 'none';
+            clientIdInput.style.display = '';
+            clientIdInput.value = '';
+          } else {
+            custom.style.display = 'none';
+            custom.value = '';
+            var ids = clientIds[selectedEndpoint];
+            if (ids && ids.length) {
+              clientIdSelect.innerHTML = '';
+              ids.forEach(function(id) {
+                var opt = document.createElement('option');
+                opt.value = id;
+                opt.textContent = id;
+                clientIdSelect.appendChild(opt);
+              });
+              clientIdSelect.style.display = '';
+              clientIdInput.style.display = 'none';
+              clientIdInput.value = clientIdSelect.value;
+            } else {
+              clientIdSelect.style.display = 'none';
+              clientIdInput.style.display = '';
+              clientIdInput.value = '';
+            }
+          }
+        }
+
+        endpointSelect.addEventListener('change', function() {
+          updateClientIdField();
+          // After updating field, sync value
+          if (clientIdSelect.style.display !== 'none') {
+            clientIdInput.value = clientIdSelect.value;
+          }
+        });
+        clientIdSelect.addEventListener('change', function() {
+          clientIdInput.value = clientIdSelect.value;
+        });
+        clientIdSelect.addEventListener('input', function() {
+          clientIdInput.value = clientIdSelect.value;
+        });
+
+        // Initial setup
+        updateClientIdField();
+      });
+    </script>
           </div>
           <div></div>
         </div>
@@ -34,6 +102,7 @@
         <div class="row">
           <div>
             <label for="client_id">Client ID <span class="muted">(required)</span></label>
+            <select id="client_id_select" style="display:none;"></select>
             <input id="client_id" required />
           </div>
           <div>
@@ -42,11 +111,18 @@
           </div>
         </div>
 
+
         <div class="row">
           <div>
             <label for="scope">Scope</label>
             <input id="scope" value="openid profile email" />
           </div>
+          <div>
+            <!-- Empty for layout symmetry -->
+          </div>
+        </div>
+
+        <div class="row">
           <div>
             <label for="response_type">Response type</label>
             <select id="response_type">
@@ -58,6 +134,80 @@
               <option>code token id_token</option>
             </select>
           </div>
+          <div>
+            <!-- Empty for layout symmetry -->
+          </div>
+        </div>
+
+        <div class="row">
+          <script>
+            // Show/hide custom endpoint field and manage client ID dropdown
+            document.addEventListener('DOMContentLoaded', function() {
+              var endpointSelect = document.getElementById('authorization_endpoint');
+              var custom = document.getElementById('authorization_endpoint_custom');
+              var clientIdInput = document.getElementById('client_id');
+              var clientIdSelect = document.getElementById('client_id_select');
+
+              // Map endpoints to client IDs
+              var clientIds = {
+                'https://dev-identification.bell.ca/authorize': ['sIcWBAKkaApUlQZCrD1mfuXOkHkGlr9z'],
+                'https://dit-identification.bell.ca/authorize': ['RNUQbJjDXGceinIaOJiT1ekv18TudLzA', 'bTW3ZQ3hCjZGD1l3g0yIONU8cmlfNM2V'],
+                'https://uat-identification.bell.ca/authorize': ['ougShRb20WBmrKYiEwMpJSvDfrvWrTs9', 'dqBjwF3UROX9PZw3sGxm4QA23NGqArhG'],
+              };
+
+              function updateClientIdField() {
+                var selectedEndpoint = endpointSelect.value;
+                if (selectedEndpoint === 'custom') {
+                  custom.style.display = '';
+                  clientIdSelect.style.display = 'none';
+                  clientIdInput.style.display = '';
+                  clientIdInput.value = '';
+                } else {
+                  custom.style.display = 'none';
+                  custom.value = '';
+                  var ids = clientIds[selectedEndpoint];
+                  if (ids && ids.length) {
+                    clientIdSelect.innerHTML = '';
+                    ids.forEach(function(id) {
+                      var opt = document.createElement('option');
+                      opt.value = id;
+                      opt.textContent = id;
+                      clientIdSelect.appendChild(opt);
+                    });
+                    clientIdSelect.style.display = '';
+                    clientIdInput.style.display = 'none';
+                    clientIdInput.value = clientIdSelect.value;
+                  } else {
+                    clientIdSelect.style.display = 'none';
+                    clientIdInput.style.display = '';
+                    clientIdInput.value = '';
+                  }
+                }
+              }
+
+              endpointSelect.addEventListener('change', function() {
+                updateClientIdField();
+              });
+
+              clientIdSelect.addEventListener('change', function() {
+                clientIdInput.value = clientIdSelect.value;
+              });
+
+              // Always keep client_id input in sync for form logic
+              clientIdSelect.addEventListener('input', function() {
+                clientIdInput.value = clientIdSelect.value;
+              });
+              endpointSelect.addEventListener('change', function() {
+                // After updating field, sync value
+                if (clientIdSelect.style.display !== 'none') {
+                  clientIdInput.value = clientIdSelect.value;
+                }
+              });
+
+              // Initial setup
+              updateClientIdField();
+            });
+          </script>
         </div>
 
         <div class="row">

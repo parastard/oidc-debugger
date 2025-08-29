@@ -118,19 +118,33 @@ function clearAlert() {
 function byId(id) { return document.getElementById(id); }
 
 function collectForm() {
+  let endpoint = byId('authorization_endpoint')?.value?.trim() || '';
+  if (endpoint === 'custom') {
+    endpoint = byId('authorization_endpoint_custom')?.value?.trim() || '';
+  }
+  let clientIdInput = byId('client_id');
+  let clientIdSelect = byId('client_id_select');
+  let client_id = '';
+  if (clientIdSelect && clientIdSelect.style.display !== 'none') {
+    client_id = clientIdSelect.value ? clientIdSelect.value.trim() : '';
+  } else if (clientIdInput) {
+    client_id = clientIdInput.value ? clientIdInput.value.trim() : '';
+  } else {
+    client_id = '';
+  }
   return {
-    authorization_endpoint: byId('authorization_endpoint').value.trim(),
-    client_id: byId('client_id').value.trim(),
-    redirect_uri: byId('redirect_uri').value.trim(),
-    scope: byId('scope').value.trim(),
-    response_type: byId('response_type').value.trim(),
-    response_mode: byId('response_mode').value,
-    state: byId('state').value.trim(),
-    nonce: byId('nonce').value.trim(),
-    pkce: byId('pkce').value,
-    code_verifier: byId('code_verifier').value.trim(),
-    code_challenge: byId('code_challenge').value.trim(),
-    extra_params: byId('extra_params').value
+    authorization_endpoint: endpoint,
+    client_id: client_id,
+    redirect_uri: byId('redirect_uri')?.value?.trim() || '',
+    scope: byId('scope')?.value?.trim() || '',
+    response_type: byId('response_type')?.value?.trim() || '',
+    response_mode: byId('response_mode')?.value || '',
+    state: byId('state')?.value?.trim() || '',
+    nonce: byId('nonce')?.value?.trim() || '',
+    pkce: byId('pkce')?.value || '',
+    code_verifier: byId('code_verifier')?.value?.trim() || '',
+    code_challenge: byId('code_challenge')?.value?.trim() || '',
+    extra_params: byId('extra_params')?.value || ''
   };
 }
 
